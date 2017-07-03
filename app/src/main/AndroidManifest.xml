@@ -6,34 +6,34 @@
      The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
      Google Maps Android API v2, but you must specify either coarse or fine
      location permissions for the 'MyLocation' functionality.
--->
-    <uses-permission android:nome="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:nome="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:nome="android.permission.INTERNET" />
+    -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:nome=".MainApplication"
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:nome=".activity.SplashActivity"
+            android:name=".activity.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:nome="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:nome="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:nome=".activity.LandingActivity"
+            android:name=".activity.LandingActivity"
             android:label="Koope"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:nome=".activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
@@ -45,15 +45,12 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
         <meta-data
-            android:nome="com.google.android.geo.API_KEY"
+            android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <service
-            android:nome=".meta.HandleLocationIntentService"
-            android:exported="false"></service>
-        <service
-            android:nome=".meta.HandleRouteIntentService"
-            android:exported="false"></service>
+            android:name=".meta.HandleLocationIntentService"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -104,7 +104,7 @@ public class UserDAO extends DaoHelper<User> implements IUserSchema {
 
     private void setContentValues(User user) {
         mContentValues = new ContentValues();
-        mContentValues.put(COLUMN_NAME, user.getNome());
+        mContentValues.put(COLUMN_NOME, user.getNome());
         mContentValues.put(COLUMN_EMAIL, user.getEmail());
         mContentValues.put(COLUMN_PASSWORD, user.getPassword());
         mContentValues.put(COLUMN_PLACA_CARRO, user.getPlacaCarro());

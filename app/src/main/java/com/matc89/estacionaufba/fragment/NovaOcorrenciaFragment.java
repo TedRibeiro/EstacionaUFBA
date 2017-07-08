@@ -80,14 +80,14 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
             case R.id.button_adicionar_ocorrencia:
                 //Capturando componentes
                 EditText editTextTituloNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_titulo);
-                EditText editTextPlacaCarroNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_minha_conta_placa_carro);
-                Spinner spinnerModeloCarroNovaOcorrencia = (Spinner) mForm.findViewById(R.id.spinner_modelo_carro);
+                EditText editTextPlacaCarroNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_placa_carro);
+                EditText editTextModeloCarroNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_modelo_carro);
                 EditText editTextDescricaoNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_descricao);
 
                 //Capturando valores dos componentes
                 String tituloNovaOcorrencia = editTextTituloNovaOcorrencia.getText().toString().trim();
                 String placaCarroNovaOcorrencia = editTextPlacaCarroNovaOcorrencia.getText().toString().trim();
-                int modeloCarroNovaOcorrencia = spinnerModeloCarroNovaOcorrencia.getSelectedItemPosition();
+                String modeloCarroNovaOcorrencia = editTextModeloCarroNovaOcorrencia.getText().toString().trim();
                 String descricaoNovaOcorrencia = editTextDescricaoNovaOcorrencia.getText().toString().trim();
                 String localNovaOcorrencia = mEditTextLocalOcorrencia.getText().toString().trim();
 

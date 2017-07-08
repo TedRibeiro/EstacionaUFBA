@@ -44,6 +44,17 @@
 
     <!--Botões-->
     <string name="adicionar">Adicionar</string>
+    <string name="editar">Editar</string>
+    <string name="delete">Deletar</string>
+
+    <string name="alert_dialog_delete">Confirma a exclusão da ocorrência?</string>
+    <string name="required_field">Campo obrigatório!</string>
+    <string name="login_successful">Usuário logado com sucesso.</string>
+    <string name="login_error">Erro no login.</string>
+    <string name="register">Registrar</string>
+    <string name="name">Nome:</string>
+    <string name="user_register_successful">Registro efetuado com sucesso</string>
+    <string name="user_register_error">Erro no registro do usuário.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

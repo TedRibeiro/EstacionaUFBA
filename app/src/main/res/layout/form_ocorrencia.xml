@@ -60,16 +60,13 @@
             android:textSize="18sp"
             android:textColor="?android:attr/textColorPrimaryNoDisable" />
 
-        <Spinner
+        <EditText
+            android:id="@+id/editText_ocorrencia_modelo_carro"
+            android:inputType="textPersonName"
+            android:hint="@string/modelo_carro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/spinner_modelo_carro"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:spinnerMode="dialog"
-            android:dropDownWidth="match_parent" />
+            android:layout_weight="1" />
     </LinearLayout>
 
     <LinearLayout
@@ -99,7 +96,6 @@
 
         <EditText
             android:id="@+id/editText_ocorrencia_local"
-            android:inputType="textPersonName"
             android:hint="@string/local"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,5 +1,6 @@
 package com.matc89.estacionaufba.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,9 +10,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.support.design.widget.NavigationView;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -23,9 +26,11 @@ import com.matc89.estacionaufba.db.DatabaseHandler;
 import com.matc89.estacionaufba.db.vo.Ocorrencia;
 import com.matc89.estacionaufba.db.vo.User;
 import com.matc89.estacionaufba.fragment.ListaOcorrenciasFragment;
+import com.matc89.estacionaufba.fragment.MapaOcorrenciasFragment;
 import com.matc89.estacionaufba.fragment.MinhaContaFragment;
 import com.matc89.estacionaufba.fragment.NovaOcorrenciaFragment;
-import com.matc89.estacionaufba.fragment.NovaOcorrenciaFragment;
+import com.matc89.estacionaufba.fragment.OcorrenciaFragment;
+import com.matc89.estacionaufba.fragment.UpdateOcorrenciaFragment;
 import com.matc89.estacionaufba.interfaces.IUserSchema;
 import com.matc89.estacionaufba.interfaces.OnOcorrenciaInteractionListener;
 import com.matc89.estacionaufba.meta.EstacionaUFBAConfigurations;
@@ -198,23 +203,72 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void mostrarOcorrencia(Ocorrencia ocorrencia) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_toggle_display:
+                Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                if (f instanceof ListaOcorrenciasFragment) {
+                    replaceFragmentTo(MapaOcorrenciasFragment.newInstance(), true);
+                } else if (f instanceof MapaOcorrenciasFragment) {
+                    replaceFragmentTo(ListaOcorrenciasFragment.newInstance(), true);
+                }
+                return true;
+            default:
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    public void onDestroy() {
+        System.exit(1);
+    }
+
+    @Override
+    public void mostrarOcorrencia(Ocorrencia ocorrencia) {
+        OcorrenciaFragment ocorrenciaFragment = OcorrenciaFragment.newInstance(ocorrencia);
+        replaceFragmentTo(ocorrenciaFragment, true);
     }
 
     @Override
     public void editarOcorrencia(Ocorrencia ocorrencia) {
-
+        UpdateOcorrenciaFragment updateOcorrrenciaFragment = UpdateOcorrenciaFragment.newInstance(ocorrencia);
+        replaceFragmentTo(updateOcorrrenciaFragment,true);
     }
 
     @Override
-    public void deletarOcorrencia(Ocorrencia ocorrencia) {
-
+    public void deletarOcorrencia(final Ocorrencia ocorrencia) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle(getApplicationContext().getString(R.string.alert_dialog_delete));
+        alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                DatabaseHandler.ocorrenciaDAO.delete(ocorrencia.getId());
+                getSupportFragmentManager().popBackStack();
+                dialog.dismiss();
+            }
+        });
+        alertBuilder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //TODO
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = alertBuilder.create();
+        dialog.show();
     }
 
     @Override
     public void atualizarOcorrencia(Ocorrencia ocorrencia) {
-
+        DatabaseHandler.ocorrenciaDAO.update(ocorrencia);
+        OcorrenciaFragment ocorrenciaFragment = OcorrenciaFragment.newInstance(ocorrencia);
+        resetFragmentOnBackPressed = true;
+        replaceFragmentTo(ocorrenciaFragment, false);
     }
 
     public void replaceFragmentTo(Fragment fragment, boolean addToBackStack) {

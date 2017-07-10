@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".fragment.NovaOcorrenciaFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/default_padding"
+    android:orientation="vertical"
+    android:background="@color/colorMainBackground">
+
+    <include
+        android:id="@+id/form_container"
+        layout="@layout/form_ocorrencia" />
+
+    <Button
+        android:id="@+id/button_adicionar_ocorrencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/form_container"
+        android:onClick="onClick"
+        android:text="@string/adicionar" />
+
+</RelativeLayout>

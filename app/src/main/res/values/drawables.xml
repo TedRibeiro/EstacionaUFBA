@@ -1,0 +1,6 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <item name="ic_menu_todas_ocorrencias" type="drawable">@drawable/ic_menu_todas_ocorrencias</item>
+    <item name="ic_menu_minha_conta" type="drawable">@drawable/ic_menu_minha_conta</item>
+    <item name="ic_menu_minhas_ocorrencias" type="drawable">@drawable/ic_menu_minhas_ocorrencias</item>
+    <item name="ic_menu_nova_ocorrencia" type="drawable">@drawable/ic_menu_nova_ocorrencia</item>
+</resources>

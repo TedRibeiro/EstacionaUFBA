@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/icaroerasmo/Downloads/estacionaufba-master/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/icaroerasmo/Downloads/estacionaufba-master/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_1da4b7fe122dcde4c9d62eb76e3e8dbd2f164564/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/icaroerasmo/Downloads/estacionaufba-master/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="b3433e674e8a99695d38d3aba02834ac14163b13">
+        <dex dex="/home/icaroerasmo/Downloads/estacionaufba-master/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_7d60c4a9c91a59b2b353a4e49f59e87d0f517080/classes.dex" />
+    </item>
+
+</items>

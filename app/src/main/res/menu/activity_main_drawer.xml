@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_todas_ocorrencias"
+        android:icon="@drawable/ic_menu_todas_ocorrencias"
+        android:title="@string/todas_ocorrencias" />
+
+    <item
+        android:id="@+id/item_nova_ocorrencia"
+        android:icon="@drawable/ic_menu_nova_ocorrencia"
+        android:title="@string/nova_ocorrencia" />
+
+    <item
+        android:id="@+id/item_minhas_ocorrencias"
+        android:icon="@drawable/ic_menu_minhas_ocorrencias"
+        android:title="@string/minhas_ocorrencias" />
+
+    <item
+        android:id="@+id/item_minha_conta"
+        android:icon="@drawable/ic_menu_minha_conta"
+        android:title="@string/minha_conta" />
+</menu>

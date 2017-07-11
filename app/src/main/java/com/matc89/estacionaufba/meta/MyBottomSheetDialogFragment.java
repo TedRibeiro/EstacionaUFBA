@@ -15,7 +15,7 @@ import com.matc89.estacionaufba.db.vo.Ocorrencia;
  * Created by tedri on 07/07/2017.
  */
 
-public class MyBottomSheetDialogFragment extends BottomSheetDialogFragment implements View.OnClickListener {
+public class MyBottomSheetDialogFragment extends BottomSheetDialogFragment{
 
     Ocorrencia mOcorrencia;
 
@@ -35,24 +35,15 @@ public class MyBottomSheetDialogFragment extends BottomSheetDialogFragment imple
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.modal_bottom_sheet, container, false);
+
         TextView ocorrenciaTitulo = (TextView) v.findViewById(R.id.textView_list_adapter_titulo_ocorrencia);
         TextView ocorrenciaLocal = (TextView) v.findViewById(R.id.textView_list_adapter_local);
         TextView ocorrenciaDateCreated = (TextView) v.findViewById(R.id.textView_list_adapter_dateCreated);
+
         ocorrenciaTitulo.setText(mOcorrencia.getTitulo());
         ocorrenciaLocal.setText(mOcorrencia.getLocal());
         ocorrenciaDateCreated.setText(mOcorrencia.getFormattedDateCreated());
 
-        v.findViewById(R.id.floatingActionButton).setOnClickListener(this);
         return v;
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            //Botão de cadastrar nova promoção
-            case R.id.floatingActionButton:
-                this.dismiss();
-                break;
-        }
     }
 }

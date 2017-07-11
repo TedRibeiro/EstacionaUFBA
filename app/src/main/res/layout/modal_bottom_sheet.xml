@@ -20,17 +20,6 @@
             android:layout_height="wrap_content"
             layout="@layout/list_adapter"
             android:layout_weight="1" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            app:fabSize="mini"
-            app:srcCompat="@android:drawable/ic_menu_directions"
-            android:id="@+id/floatingActionButton"
-            app:backgroundTint="?attr/colorPrimaryDark"
-            android:layout_weight="0"
-            android:layout_gravity="center"/>
     </LinearLayout>
 
 </LinearLayout>

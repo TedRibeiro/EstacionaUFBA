@@ -83,7 +83,7 @@
         android:textColor="@android:color/white" />
 
     <TextView
-        android:text="@string/senha"
+        android:text="@string/placa_carro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/editText_register_password"

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorMainBackground"
-    tools:context=".fragment.ListaOcorrenciasFragment">
+    tools:context="com.matc89.estacionaufba.fragment.ListaOcorrenciasFragment">
 
 
     <ListView

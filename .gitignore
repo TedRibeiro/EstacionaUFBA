@@ -1,8 +1,14 @@
+
 \.gradle/
+
 \.idea/
+
 *.bin
+
 \build
+
 local\.properties
+
 estacionaufba-master\.iml
 
 

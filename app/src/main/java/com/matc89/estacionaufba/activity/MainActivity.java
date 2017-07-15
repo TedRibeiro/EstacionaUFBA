@@ -1,10 +1,13 @@
 package com.matc89.estacionaufba.activity;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -44,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private Toolbar toolbar = null;
     private NavigationView navigationView = null;
+    private boolean hasPermissionToAccessLocation = false;
     private boolean resetFragmentOnBackPressed = false;
 
     //VOs
@@ -52,6 +56,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        if(ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }else{
+            hasPermissionToAccessLocation = true;
+        }
 
         //Abrindo activity e banco de dados
         super.onCreate(savedInstanceState);
@@ -190,7 +199,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.item_todas_ocorrencias) {
             currentFragment = ListaOcorrenciasFragment.newInstance();
         } else if (id == R.id.item_nova_ocorrencia) {
-            currentFragment = NovaOcorrenciaFragment.newInstance(user.getId());
+            if(hasPermissionToAccessLocation) {
+                currentFragment = NovaOcorrenciaFragment.newInstance(user.getId());
+            }
         } else if (id == R.id.item_minhas_ocorrencias) {
             currentFragment = ListaOcorrenciasFragment.newInstance(user.getId());
         } else if (id == R.id.item_minha_conta) {
@@ -209,6 +220,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    hasPermissionToAccessLocation = true;
+                }else{
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                }
+                return;
+            }
+        }
+}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -233,10 +259,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-   /* @Override
+    @Override
     public void onDestroy() {
+        super.onDestroy();
         System.exit(1);
-    }*/
+    }
 
     @Override
     public void mostrarOcorrencia(Ocorrencia ocorrencia) {

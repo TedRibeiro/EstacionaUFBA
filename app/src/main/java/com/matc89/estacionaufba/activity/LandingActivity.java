@@ -2,6 +2,7 @@ package com.matc89.estacionaufba.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaCodec;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,9 @@ import com.matc89.estacionaufba.db.vo.User;
 import com.matc89.estacionaufba.fragment.RegisterFragment;
 import com.matc89.estacionaufba.meta.EstacionaUFBAConfigurations;
 import com.matc89.estacionaufba.meta.EstacionaUFBAFunctions;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by tedri on 01/07/2017.
@@ -108,6 +112,8 @@ public class LandingActivity extends AppCompatActivity {
                 EditText editTextRegisterPassword = (EditText) findViewById(R.id.editText_register_password);
                 EditText editTextRegisterPlacaCarro = (EditText) findViewById(R.id.editText_register_placa_carro);
 
+                Pattern emailPattern = Pattern.compile("([A-Za-z0-9.-])+@([A-Za-z0-9-])+(\\.([a-zA-Z])+)+");
+
                 //Capturando valores dos componentes
                 String registerName = editTextRegisterName.getText().toString().trim();
                 String registerEmail = editTextRegisterEmail.getText().toString().trim();
@@ -118,45 +124,63 @@ public class LandingActivity extends AppCompatActivity {
                 // de 18 anos...)
                 //Validando campos vazios
 
+                boolean error = false;
+
                 if (registerName.length() == 0) {
                     editTextRegisterName.requestFocus();
                     editTextRegisterName.setError(getApplicationContext().getString(R.string.required_field));
-                } else if (registerEmail.length() == 0) {
+                    error = true;
+                }
+                if (registerEmail.length() == 0) {
                     editTextRegisterEmail.requestFocus();
                     editTextRegisterEmail.setError(getApplicationContext().getString(R.string.required_field));
+                    error = true;
                 } else if (databaseHandler.getUserDAO().fetchUserByEmail(registerEmail) != null) {
                     editTextRegisterEmail.requestFocus();
                     editTextRegisterEmail.setError(getApplicationContext().getString(R.string.existe_usuario));
-                } else if (registerPassword.length() == 0) {
+                    error = true;
+                } else if(!emailPattern.matcher(registerEmail).matches()){
+                    editTextRegisterEmail.requestFocus();
+                    editTextRegisterEmail.setError("E-mail inválido");
+                    error = true;
+                }
+                if (registerPassword.length() == 0) {
                     editTextRegisterPassword.requestFocus();
                     editTextRegisterPassword.setError(getApplicationContext().getString(R.string.required_field));
-                } else if (registerBirthday.length() == 0) {
+                    error = true;
+                }
+                if (registerBirthday.length() == 0) {
                     editTextRegisterPlacaCarro.requestFocus();
                     editTextRegisterPlacaCarro.setError(getApplicationContext().getString(R.string.required_field));
+                    error = true;
+                }
+
+                if(error){
+                    break;
+                }
+
+                //Cadastrando usuário
+                // TODO Tratamento das strings para evitar SQL injection
+                User user = new User(registerName, registerEmail, registerPassword, registerBirthday, 1,
+                        EstacionaUFBAFunctions.getCurrentDateTime(), null);
+                if (databaseHandler.getUserDAO().create(user)) {
+                    //Avisando que o cadastro obteve sucesso
+                    Toast.makeText(this, getApplicationContext().getString(R.string.user_register_successful),
+                            Toast.LENGTH_SHORT).show();
+
+                    //Colocando nas configurações o usuário recém cadastrado
+                    SharedPreferences sharedPreferences = getSharedPreferences(EstacionaUFBAConfigurations.CONFIGURATION,
+                            0);
+                    SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+                    sharedPreferencesEditor.putLong(EstacionaUFBAConfigurations.CONFIGURATION_LOGGED_USER, user.getId());
+                    sharedPreferencesEditor.commit();
+
+                    //Abrindo o app de fato
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
                 } else {
-                    //Cadastrando usuário
-                    // TODO Tratamento das strings para evitar SQL injection
-                    User user = new User(registerName, registerEmail, registerPassword, registerBirthday, 1,
-                            EstacionaUFBAFunctions.getCurrentDateTime(), null);
-                    if (databaseHandler.getUserDAO().create(user)) {
-                        //Avisando que o cadastro obteve sucesso
-                        Toast.makeText(this, getApplicationContext().getString(R.string.user_register_successful),
-                                Toast.LENGTH_SHORT).show();
-
-                        //Colocando nas configurações o usuário recém cadastrado
-                        SharedPreferences sharedPreferences = getSharedPreferences(EstacionaUFBAConfigurations.CONFIGURATION,
-                                0);
-                        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
-                        sharedPreferencesEditor.putLong(EstacionaUFBAConfigurations.CONFIGURATION_LOGGED_USER, user.getId());
-                        sharedPreferencesEditor.commit();
-
-                        //Abrindo o app de fato
-                        Intent intent = new Intent(this, MainActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(this, getApplicationContext().getString(R.string.user_register_error), Toast
-                                .LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(this, getApplicationContext().getString(R.string.user_register_error), Toast
+                            .LENGTH_SHORT).show();
                 }
                 break;
         }

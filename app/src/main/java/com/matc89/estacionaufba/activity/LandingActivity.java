@@ -112,7 +112,7 @@ public class LandingActivity extends AppCompatActivity {
                 EditText editTextRegisterPassword = (EditText) findViewById(R.id.editText_register_password);
                 EditText editTextRegisterPlacaCarro = (EditText) findViewById(R.id.editText_register_placa_carro);
 
-                Pattern emailPattern = Pattern.compile("([A-Za-z0-9.-])+@([A-Za-z0-9-])+(\\.([a-zA-Z])+)+");
+                Pattern emailPattern = Pattern.compile("([A-Za-z0-9.\\-_])+@([A-Za-z0-9-])+(\\.([a-zA-Z])+)+");
 
                 //Capturando valores dos componentes
                 String registerName = editTextRegisterName.getText().toString().trim();

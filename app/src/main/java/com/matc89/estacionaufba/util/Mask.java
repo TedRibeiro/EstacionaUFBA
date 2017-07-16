@@ -1,4 +1,4 @@
-package com.matc89.estacionaufba;
+package com.matc89.estacionaufba.util;
 
 import android.text.TextWatcher;
 import android.widget.EditText;

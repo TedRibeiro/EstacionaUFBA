@@ -11,7 +11,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.matc89.estacionaufba.Mask;
 import com.matc89.estacionaufba.R;
 import com.matc89.estacionaufba.db.DatabaseHandler;
 import com.matc89.estacionaufba.db.vo.User;
@@ -19,7 +18,6 @@ import com.matc89.estacionaufba.fragment.RegisterFragment;
 import com.matc89.estacionaufba.meta.EstacionaUFBAConfigurations;
 import com.matc89.estacionaufba.meta.EstacionaUFBAFunctions;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**

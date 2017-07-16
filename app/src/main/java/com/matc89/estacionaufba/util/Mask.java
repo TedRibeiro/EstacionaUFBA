@@ -3,6 +3,7 @@ package com.matc89.estacionaufba.util;
 import android.text.TextWatcher;
 import android.widget.EditText;
 import android.text.Editable;
+import android.widget.Toast;
 
 /**
  * Created by icaroerasmo on 15/07/17.
@@ -10,10 +11,6 @@ import android.text.Editable;
 
 public abstract class Mask {
     public static String unmask(String s) {
-
-        /*if(!s.matches("([a-zA-Z]{3}-|[a-z-A-Z]{0,3}|[a-zA-Z]{3}-[0-9]{1,4}|[a-zA-Z]{3}-[0-9]{4})")){
-            return s.substring(0, s.length()-1);
-        }*/
 
         return s.replaceAll("[.]", "").replaceAll("[-]", "")
                 .replaceAll("[/]", "").replaceAll("[(]", "")
@@ -69,4 +66,43 @@ public abstract class Mask {
             }
         };
     }
+
+    public static TextWatcher insert(final int maxSize, final EditText ediTxt) {
+        return new TextWatcher() {
+            boolean isUpdating;
+            String old = "";
+
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+
+                String str = Mask.unmask(s.toString());
+
+                if (isUpdating) {
+                    old = str;
+                    isUpdating = false;
+                    return;
+                }
+
+                if(str.length() <= maxSize){
+                    isUpdating = true;
+                    ediTxt.setText(str);
+                    ediTxt.setSelection(str.length());
+                }else{
+                    isUpdating = true;
+                    ediTxt.setText(old);
+                    ediTxt.setSelection(old.length());
+                    Toast.makeText(ediTxt.getContext(), "Tamanho máximo de "+maxSize+" caracteres atingido",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+            }
+
+            public void afterTextChanged(Editable s) {
+            }
+        };
+    }
+
 }

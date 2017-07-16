@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ResultReceiver;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.matc89.estacionaufba.meta.Constants;
 import com.matc89.estacionaufba.meta.EstacionaUFBAConfigurations;
 import com.matc89.estacionaufba.meta.EstacionaUFBAFunctions;
 import com.matc89.estacionaufba.meta.HandleLocationIntentService;
+import com.matc89.estacionaufba.util.Mask;
 
 public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchema, View.OnClickListener {
     private static final int UPDATE_LOCAL_ADDRESS = 0;
@@ -72,6 +74,18 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        EditText editTextPlacaCarroNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_placa_carro);
+        editTextPlacaCarroNovaOcorrencia.addTextChangedListener(Mask.insert("aaa-0000", editTextPlacaCarroNovaOcorrencia));
+
+        EditText editTextTituloNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_titulo);
+        editTextTituloNovaOcorrencia.addTextChangedListener(Mask.insert(50, editTextTituloNovaOcorrencia));
+
+        EditText editTextDescricaoNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_descricao);
+        editTextDescricaoNovaOcorrencia.addTextChangedListener(Mask.insert(200, editTextPlacaCarroNovaOcorrencia));
+    }
 
     @Override
     public void onClick(View v) {
@@ -98,39 +112,52 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                     longitude = mLocation.getLongitude();
                 }
 
-                // TODO Validar campos (máximo de caracteres)
+                boolean error = false;
+
                 //Validando campos vazios
                 if (tituloNovaOcorrencia.length() == 0) {
                     editTextTituloNovaOcorrencia.requestFocus();
                     editTextTituloNovaOcorrencia.setError(mContext.getString(R.string.campo_obrigatorio));
-                } else if (placaCarroNovaOcorrencia.length() == 0) {
+                    error = true;
+                }
+                if (placaCarroNovaOcorrencia.length() == 0) {
                     editTextTituloNovaOcorrencia.requestFocus();
                     editTextTituloNovaOcorrencia.setError(mContext.getString(R.string.campo_obrigatorio));
-                } else if (localNovaOcorrencia.length() == 0) {
+                    error = true;
+                } else if(placaCarroNovaOcorrencia.length() < 8){
+                    editTextTituloNovaOcorrencia.requestFocus();
+                    editTextTituloNovaOcorrencia.setError("Placa inválida");
+                    error = true;
+                }
+                if (localNovaOcorrencia.length() == 0) {
                     mEditTextLocalOcorrencia.requestFocus();
                     mEditTextLocalOcorrencia.setError(mContext.getString(R.string.campo_obrigatorio));
-                } else {
-                    //Cadastrando ocorrência
-
-
-                    DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
-                    databaseHandler.open();
-
-                    mOcorrencia = new Ocorrencia(tituloNovaOcorrencia, descricaoNovaOcorrencia, placaCarroNovaOcorrencia,
-                            modeloCarroNovaOcorrencia, localNovaOcorrencia, latitude, longitude, 1, mOcorrencia.getUserId(),
-                            EstacionaUFBAFunctions.getCurrentDateTime(), null);
-                    if (databaseHandler.getOcorrenciaDAO().addOcorrencia(mOcorrencia)) {
-                        //Avisando que o cadastro obteve sucesso
-                        Toast.makeText(mContext, mContext.getString(R.string.criacao_ocorrencia_sucedida), Toast
-                                .LENGTH_SHORT).show();
-                        ((MainActivity) mContext).replaceFragmentTo(new ListaOcorrenciasFragment(), true);
-                    } else {
-                        //Avisando que o cadastro teve erro
-                        Toast.makeText(mContext, mContext.getString(R.string.criacao_ocorrencia_malsucedida), Toast
-                                .LENGTH_SHORT).show();
-                    }
-                    databaseHandler.close();
+                    error = true;
                 }
+
+                if(error){
+                    break;
+                }
+
+                //Cadastrando ocorrência
+
+                DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
+                databaseHandler.open();
+
+                mOcorrencia = new Ocorrencia(tituloNovaOcorrencia, descricaoNovaOcorrencia, placaCarroNovaOcorrencia,
+                        modeloCarroNovaOcorrencia, localNovaOcorrencia, latitude, longitude, 1, mOcorrencia.getUserId(),
+                        EstacionaUFBAFunctions.getCurrentDateTime(), null);
+                if (databaseHandler.getOcorrenciaDAO().addOcorrencia(mOcorrencia)) {
+                    //Avisando que o cadastro obteve sucesso
+                    Toast.makeText(mContext, mContext.getString(R.string.criacao_ocorrencia_sucedida), Toast
+                            .LENGTH_SHORT).show();
+                    ((MainActivity) mContext).replaceFragmentTo(new ListaOcorrenciasFragment(), true);
+                } else {
+                    //Avisando que o cadastro teve erro
+                    Toast.makeText(mContext, mContext.getString(R.string.criacao_ocorrencia_malsucedida), Toast
+                            .LENGTH_SHORT).show();
+                }
+                databaseHandler.close();
                 break;
         }
     }

@@ -111,18 +111,14 @@ public class LandingActivity extends AppCompatActivity {
                 EditText editTextRegisterPassword = (EditText) findViewById(R.id.editText_register_password);
                 EditText editTextRegisterPlacaCarro = (EditText) findViewById(R.id.editText_register_placa_carro);
 
-                Pattern emailPattern = Pattern.compile("([A-Za-z0-9.\\-_])+@([A-Za-z0-9-])+(\\.([a-zA-Z])+)+");
-                Pattern namePattern = Pattern.compile("/[a-zA-Z\\u00C0-\\u00FF ]+/i");
+                Pattern namePattern = Pattern.compile("^[a-zA-Z\\u00C0-\\u00FF]+( [a-zA-Z\\u00C0-\\u00FF]+)*"); //Valida nome
+                Pattern emailPattern = Pattern.compile("([A-Za-z0-9.\\-_])+@([A-Za-z0-9-])+(\\.([a-zA-Z])+)+"); //Valida e-mail
 
                 //Capturando valores dos componentes
                 String registerName = editTextRegisterName.getText().toString().trim();
                 String registerEmail = editTextRegisterEmail.getText().toString().trim();
                 String registerPassword = editTextRegisterPassword.getText().toString().trim();
                 String registerPlacaCarro = editTextRegisterPlacaCarro.getText().toString().trim();
-
-                // TODO Validar campos (e-mail válido, campos com tamanho até o máximo, data de nascimento a partir
-                // de 18 anos...)
-                //Validando campos vazios
 
                 boolean error = false;
 
@@ -175,7 +171,7 @@ public class LandingActivity extends AppCompatActivity {
 
                 //Cadastrando usuário
                 // TODO Tratamento das strings para evitar SQL injection
-                User user = new User(registerName, registerEmail, registerPassword, registerPlacaCarro, 1,
+                User user = new User(registerName, registerEmail, registerPassword, registerPlacaCarro.toUpperCase(), 1,
                         EstacionaUFBAFunctions.getCurrentDateTime(), null);
                 if (databaseHandler.getUserDAO().create(user)) {
                     //Avisando que o cadastro obteve sucesso

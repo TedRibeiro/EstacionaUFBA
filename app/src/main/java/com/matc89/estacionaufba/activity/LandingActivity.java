@@ -2,7 +2,6 @@ package com.matc89.estacionaufba.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.MediaCodec;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.matc89.estacionaufba.Mask;
 import com.matc89.estacionaufba.R;
 import com.matc89.estacionaufba.db.DatabaseHandler;
 import com.matc89.estacionaufba.db.vo.User;
@@ -32,6 +32,7 @@ public class LandingActivity extends AppCompatActivity {
         //Verificando se existe um usuário logado
         SharedPreferences sharedPreferences = getSharedPreferences(EstacionaUFBAConfigurations.CONFIGURATION, 0);
         Long loggedUser = sharedPreferences.getLong(EstacionaUFBAConfigurations.CONFIGURATION_LOGGED_USER, 0);
+
         if (loggedUser > 0) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -113,12 +114,13 @@ public class LandingActivity extends AppCompatActivity {
                 EditText editTextRegisterPlacaCarro = (EditText) findViewById(R.id.editText_register_placa_carro);
 
                 Pattern emailPattern = Pattern.compile("([A-Za-z0-9.\\-_])+@([A-Za-z0-9-])+(\\.([a-zA-Z])+)+");
+                Pattern namePattern = Pattern.compile("/[a-zA-Z\\u00C0-\\u00FF ]+/i");
 
                 //Capturando valores dos componentes
                 String registerName = editTextRegisterName.getText().toString().trim();
                 String registerEmail = editTextRegisterEmail.getText().toString().trim();
                 String registerPassword = editTextRegisterPassword.getText().toString().trim();
-                String registerBirthday = editTextRegisterPlacaCarro.getText().toString().trim();
+                String registerPlacaCarro = editTextRegisterPlacaCarro.getText().toString().trim();
 
                 // TODO Validar campos (e-mail válido, campos com tamanho até o máximo, data de nascimento a partir
                 // de 18 anos...)
@@ -126,11 +128,18 @@ public class LandingActivity extends AppCompatActivity {
 
                 boolean error = false;
 
+                //valida nome
                 if (registerName.length() == 0) {
                     editTextRegisterName.requestFocus();
                     editTextRegisterName.setError(getApplicationContext().getString(R.string.required_field));
                     error = true;
+                }else if(!namePattern.matcher(registerName).matches()){
+                    editTextRegisterName.requestFocus();
+                    editTextRegisterName.setError("Nome inválido");
+                    error = true;
                 }
+
+                //valida e-mail
                 if (registerEmail.length() == 0) {
                     editTextRegisterEmail.requestFocus();
                     editTextRegisterEmail.setError(getApplicationContext().getString(R.string.required_field));
@@ -144,15 +153,22 @@ public class LandingActivity extends AppCompatActivity {
                     editTextRegisterEmail.setError("E-mail inválido");
                     error = true;
                 }
+
+                //valida senha
                 if (registerPassword.length() == 0) {
                     editTextRegisterPassword.requestFocus();
                     editTextRegisterPassword.setError(getApplicationContext().getString(R.string.required_field));
                     error = true;
                 }
-                if (registerBirthday.length() == 0) {
+
+                //valida nascimento
+                if (registerPlacaCarro.length() == 0) {
                     editTextRegisterPlacaCarro.requestFocus();
                     editTextRegisterPlacaCarro.setError(getApplicationContext().getString(R.string.required_field));
                     error = true;
+                }else if(registerPlacaCarro.length() < 8){
+                    editTextRegisterPlacaCarro.requestFocus();
+                    editTextRegisterPlacaCarro.setError("Placa inválida");
                 }
 
                 if(error){
@@ -161,7 +177,7 @@ public class LandingActivity extends AppCompatActivity {
 
                 //Cadastrando usuário
                 // TODO Tratamento das strings para evitar SQL injection
-                User user = new User(registerName, registerEmail, registerPassword, registerBirthday, 1,
+                User user = new User(registerName, registerEmail, registerPassword, registerPlacaCarro, 1,
                         EstacionaUFBAFunctions.getCurrentDateTime(), null);
                 if (databaseHandler.getUserDAO().create(user)) {
                     //Avisando que o cadastro obteve sucesso

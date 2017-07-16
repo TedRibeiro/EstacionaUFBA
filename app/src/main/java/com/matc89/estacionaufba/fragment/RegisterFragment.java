@@ -3,12 +3,15 @@ package com.matc89.estacionaufba.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.matc89.estacionaufba.Mask;
 import com.matc89.estacionaufba.R;
 
 /**
@@ -26,8 +29,15 @@ public class RegisterFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register, container, false);
-
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //Máscara da placa do carro
+        EditText placaCarro = (EditText) getActivity().findViewById(R.id.editText_register_placa_carro);
+        placaCarro.addTextChangedListener(Mask.insert("aaa-0000", placaCarro));
     }
 
     public static RegisterFragment newInstance() {

@@ -2,6 +2,7 @@ package com.matc89.estacionaufba.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.matc89.estacionaufba.R;
@@ -192,12 +194,21 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                 EditText editTextTituloNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_titulo);
                 EditText editTextPlacaCarroNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_placa_carro);
                 Spinner spinnerModeloCarroNovaOcorrencia = (Spinner) mForm.findViewById(R.id.spinner_ocorrencia_modelo_carro);
+                Spinner spinnerMontadoraCarroNovaOcorrencia = (Spinner) mForm.findViewById(R.id.spinner_ocorrencia_montadora_carro);
                 EditText editTextDescricaoNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_descricao);
 
                 //Capturando valores dos componentes
                 String tituloNovaOcorrencia = editTextTituloNovaOcorrencia.getText().toString().trim();
                 String placaCarroNovaOcorrencia = editTextPlacaCarroNovaOcorrencia.getText().toString().trim();
-                String modeloCarroNovaOcorrencia = spinnerModeloCarroNovaOcorrencia.getSelectedItem().toString();
+
+                String modeloCarroNovaOcorrencia = spinnerModeloCarroNovaOcorrencia.getSelectedItem()
+                        == null || spinnerModeloCarroNovaOcorrencia.getSelectedItemPosition() == 0 ?
+                        null : spinnerModeloCarroNovaOcorrencia.getSelectedItem().toString();
+
+                String montadoraCarroNovaOcorrencia = spinnerMontadoraCarroNovaOcorrencia.getSelectedItem()
+                        == null || spinnerMontadoraCarroNovaOcorrencia.getSelectedItemPosition() == 0  ?
+                        null : spinnerMontadoraCarroNovaOcorrencia.getSelectedItem().toString();
+
                 String descricaoNovaOcorrencia = editTextDescricaoNovaOcorrencia.getText().toString().trim();
                 String localNovaOcorrencia = mEditTextLocalOcorrencia.getText().toString().trim();
 
@@ -228,6 +239,18 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                 if (localNovaOcorrencia.length() == 0) {
                     mEditTextLocalOcorrencia.requestFocus();
                     mEditTextLocalOcorrencia.setError(mContext.getString(R.string.campo_obrigatorio));
+                    error = true;
+                }
+
+                if(montadoraCarroNovaOcorrencia == null){
+                    spinnerMontadoraCarroNovaOcorrencia.requestFocus();
+                    Toast.makeText(this.getContext(), "Montadora do carro obrigatório", Toast.LENGTH_SHORT).show();
+                    error = true;
+                }
+
+                if(modeloCarroNovaOcorrencia == null){
+                    spinnerModeloCarroNovaOcorrencia.requestFocus();
+                    Toast.makeText(this.getContext(), "Modelo do carro obrigatório", Toast.LENGTH_SHORT).show();
                     error = true;
                 }
 

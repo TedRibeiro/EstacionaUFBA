@@ -84,7 +84,7 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
         editTextTituloNovaOcorrencia.addTextChangedListener(Mask.insert(50, editTextTituloNovaOcorrencia));
 
         EditText editTextDescricaoNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_descricao);
-        editTextDescricaoNovaOcorrencia.addTextChangedListener(Mask.insert(200, editTextPlacaCarroNovaOcorrencia));
+        editTextDescricaoNovaOcorrencia.addTextChangedListener(Mask.insert(200, editTextDescricaoNovaOcorrencia));
     }
 
     @Override

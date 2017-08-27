@@ -69,7 +69,7 @@ public abstract class Mask {
 
     public static TextWatcher insert(final int maxSize, final EditText ediTxt) {
         return new TextWatcher() {
-            boolean isUpdating;
+            //boolean isUpdating;
             String old = "";
 
             public void onTextChanged(CharSequence s, int start, int before,
@@ -77,23 +77,26 @@ public abstract class Mask {
 
                 String str = Mask.unmask(s.toString());
 
-                if (isUpdating) {
-                    old = str;
-                    isUpdating = false;
-                    return;
-                }
+                //if (isUpdating) {
+                    //if(old.length() <= maxSize) {
+                        //old = str;
+                    //}
+                    //isUpdating = false;
+                  //  return;
+                //}
 
-                if(str.length() <= maxSize){
-                    isUpdating = true;
-                    ediTxt.setText(str);
-                    ediTxt.setSelection(str.length());
-                }else{
-                    isUpdating = true;
+                if(str.length() > maxSize){
+                    //isUpdating = true;
                     ediTxt.setText(old);
                     ediTxt.setSelection(old.length());
                     Toast.makeText(ediTxt.getContext(), "Tamanho máximo de "+maxSize+" caracteres atingido",
                             Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
+                old = str;
+
+                //isUpdating = true;
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count,

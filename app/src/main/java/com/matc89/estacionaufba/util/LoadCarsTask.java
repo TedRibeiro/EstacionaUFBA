@@ -1,19 +1,12 @@
 package com.matc89.estacionaufba.util;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
-
-import com.matc89.estacionaufba.enums.JsonOperation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

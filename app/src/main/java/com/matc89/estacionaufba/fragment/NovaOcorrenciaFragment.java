@@ -25,7 +25,6 @@ import com.matc89.estacionaufba.interfaces.IOcorrenciaSchema;
 import com.matc89.estacionaufba.meta.Constants;
 import com.matc89.estacionaufba.meta.EstacionaUFBAFunctions;
 import com.matc89.estacionaufba.meta.HandleLocationIntentService;
-import com.matc89.estacionaufba.util.JsonBrandAdapter;
 import com.matc89.estacionaufba.util.JsonModelAdapter;
 import com.matc89.estacionaufba.util.LoadCarsTask;
 import com.matc89.estacionaufba.util.Mask;
@@ -95,7 +94,7 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
             e.printStackTrace();
         }
 
-        JsonBrandAdapter brandAdapter = new JsonBrandAdapter(this.getActivity(), list);
+        JsonModelAdapter brandAdapter = new JsonModelAdapter(this.getActivity(), list);
 
         final Activity thisAct = this.getActivity();
 
@@ -225,8 +224,8 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                     editTextTituloNovaOcorrencia.setError(mContext.getString(R.string.campo_obrigatorio));
                     error = true;
                 } else if(placaCarroNovaOcorrencia.length() < 8){
-                    editTextTituloNovaOcorrencia.requestFocus();
-                    editTextTituloNovaOcorrencia.setError("Placa inválida");
+                    editTextPlacaCarroNovaOcorrencia.requestFocus();
+                    editTextPlacaCarroNovaOcorrencia.setError("Placa inválida");
                     error = true;
                 }
                 if (localNovaOcorrencia.length() == 0) {

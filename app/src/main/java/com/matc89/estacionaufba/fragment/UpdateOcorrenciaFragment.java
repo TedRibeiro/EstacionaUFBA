@@ -6,8 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.matc89.estacionaufba.R;
 import com.matc89.estacionaufba.db.vo.Ocorrencia;
@@ -43,7 +45,7 @@ public class UpdateOcorrenciaFragment extends Fragment {
 
         EditText ocorrenciaTitulo = (EditText) view.findViewById(R.id.editText_ocorrencia_titulo);
         EditText ocorrenciaPlacaCarro = (EditText) view.findViewById(R.id.editText_ocorrencia_placa_carro);
-        EditText ocorrenciaModeloCarro = (EditText) view.findViewById(R.id.editText_ocorrencia_modelo_carro);
+        Spinner ocorrenciaModeloCarro = (Spinner) view.findViewById(R.id.spinner_ocorrencia_modelo_carro);
         EditText ocorrenciaDescricao = (EditText) view.findViewById(R.id.editText_ocorrencia_descricao);
         EditText ocorrenciaLocal = (EditText) view.findViewById(R.id.editText_ocorrencia_local);
 
@@ -53,7 +55,7 @@ public class UpdateOcorrenciaFragment extends Fragment {
                 View view = (View) button.getParent();
                 EditText ocorrenciaTitulo = (EditText) view.findViewById(R.id.editText_ocorrencia_titulo);
                 EditText ocorrenciaPlacaCarro = (EditText) view.findViewById(R.id.editText_ocorrencia_placa_carro);
-                EditText ocorrenciaModeloCarro = (EditText) view.findViewById(R.id.editText_ocorrencia_modelo_carro);
+                Spinner ocorrenciaModeloCarro = (Spinner) view.findViewById(R.id.spinner_ocorrencia_modelo_carro);
                 EditText ocorrenciaDescricao = (EditText) view.findViewById(R.id.editText_ocorrencia_descricao);
                 EditText ocorrenciaLocal = (EditText) view.findViewById(R.id.editText_ocorrencia_local);
 
@@ -64,9 +66,8 @@ public class UpdateOcorrenciaFragment extends Fragment {
                 } else if (ocorrenciaPlacaCarro.getText().length() == 0) {
                     ocorrenciaPlacaCarro.requestFocus();
                     ocorrenciaPlacaCarro.setError(mContext.getString(R.string.required_field));
-                } else if (ocorrenciaModeloCarro.getText().length() == 0){
+                } else if (ocorrenciaModeloCarro.getSelectedItemPosition() != 0){
                     ocorrenciaModeloCarro.requestFocus();
-                    ocorrenciaModeloCarro.setError(mContext.getString(R.string.required_field));
                 } else if (ocorrenciaDescricao.getText().length() == 0){
                     ocorrenciaDescricao.requestFocus();
                     ocorrenciaDescricao.setError(mContext.getString(R.string.required_field));
@@ -89,11 +90,31 @@ public class UpdateOcorrenciaFragment extends Fragment {
         //Setando os valores dos componentes
         ocorrenciaTitulo.setText(mOcorrencia.getTitulo());
         ocorrenciaLocal.setText(mOcorrencia.getLocal());
-        ocorrenciaModeloCarro.setText(mOcorrencia.getModeloCarro());
+
+        Spinner spinn = (Spinner) this.getActivity().
+                findViewById(R.id.spinner_ocorrencia_modelo_carro);
+
+        ocorrenciaModeloCarro.setSelection(getPositionOfItem(spinn, mOcorrencia.getModeloCarro()));
         ocorrenciaDescricao.setText(mOcorrencia.getDescricao());
         ocorrenciaPlacaCarro.setText(mOcorrencia.getPlacaCarro());
 
         return view;
+    }
+
+    Integer getPositionOfItem(Spinner spinner, String value){
+
+        Adapter adpt = spinner.getAdapter();
+
+        for(int i = 0; i < adpt.getCount(); i++){
+
+            String adptItem = (String) adpt.getItem(i);
+
+            if(value.equals(adptItem)){
+                return i;
+            }
+        }
+
+        return null;
     }
 
     @Override

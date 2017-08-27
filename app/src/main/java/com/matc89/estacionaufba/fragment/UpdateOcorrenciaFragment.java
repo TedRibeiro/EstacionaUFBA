@@ -45,7 +45,7 @@ public class UpdateOcorrenciaFragment extends Fragment {
 
         EditText ocorrenciaTitulo = (EditText) view.findViewById(R.id.editText_ocorrencia_titulo);
         EditText ocorrenciaPlacaCarro = (EditText) view.findViewById(R.id.editText_ocorrencia_placa_carro);
-        Spinner ocorrenciaModeloCarro = (Spinner) view.findViewById(R.id.spinner_ocorrencia_modelo_carro);
+        Spinner  ocorrenciaModeloCarro = (Spinner) view.findViewById(R.id.spinner_ocorrencia_modelo_carro);
         EditText ocorrenciaDescricao = (EditText) view.findViewById(R.id.editText_ocorrencia_descricao);
         EditText ocorrenciaLocal = (EditText) view.findViewById(R.id.editText_ocorrencia_local);
 

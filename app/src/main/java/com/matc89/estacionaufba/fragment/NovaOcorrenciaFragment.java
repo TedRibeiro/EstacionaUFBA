@@ -2,7 +2,6 @@ package com.matc89.estacionaufba.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,28 +13,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.matc89.estacionaufba.R;
 import com.matc89.estacionaufba.activity.MainActivity;
 import com.matc89.estacionaufba.db.DatabaseHandler;
 import com.matc89.estacionaufba.db.vo.Ocorrencia;
-import com.matc89.estacionaufba.enums.JsonOperation;
-import com.matc89.estacionaufba.enums.JsonType;
 import com.matc89.estacionaufba.interfaces.IOcorrenciaSchema;
 import com.matc89.estacionaufba.meta.Constants;
 import com.matc89.estacionaufba.meta.EstacionaUFBAFunctions;
 import com.matc89.estacionaufba.meta.HandleLocationIntentService;
-import com.matc89.estacionaufba.util.JsonAdapter;
+import com.matc89.estacionaufba.util.JsonBrandAdapter;
+import com.matc89.estacionaufba.util.JsonModelAdapter;
 import com.matc89.estacionaufba.util.LoadCarsTask;
 import com.matc89.estacionaufba.util.Mask;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -101,11 +95,11 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
             e.printStackTrace();
         }
 
-        JsonAdapter adapter = new JsonAdapter(this.getActivity(), list);
+        JsonBrandAdapter brandAdapter = new JsonBrandAdapter(this.getActivity(), list);
 
         final Activity thisAct = this.getActivity();
 
-        montaSpinn.setAdapter(adapter);
+        montaSpinn.setAdapter(brandAdapter);
         montaSpinn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -114,7 +108,6 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
 
                 loadCarsTask.execute();
 
-                JsonAdapter adapter = null;
                 try {
 
                     Map<Integer, String> elements = loadCarsTask.get();
@@ -125,7 +118,8 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                         return;
                     }
 
-                    adapter = new JsonAdapter(thisAct, elements);
+                    JsonModelAdapter modelAdapter = new JsonModelAdapter(thisAct, elements);
+                    modelSpinn.setAdapter(modelAdapter);
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -133,7 +127,6 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                     e.printStackTrace();
                 }
 
-                modelSpinn.setAdapter(adapter);
                 modelSpinn.setEnabled(true);
             }
 
@@ -201,12 +194,12 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                 String tituloNovaOcorrencia = editTextTituloNovaOcorrencia.getText().toString().trim();
                 String placaCarroNovaOcorrencia = editTextPlacaCarroNovaOcorrencia.getText().toString().trim();
 
-                String modeloCarroNovaOcorrencia = spinnerModeloCarroNovaOcorrencia.getSelectedItem()
-                        == null || spinnerModeloCarroNovaOcorrencia.getSelectedItemPosition() == 0 ?
+                String modeloCarroNovaOcorrencia =
+                        spinnerModeloCarroNovaOcorrencia.getSelectedItemPosition() == 0 ?
                         null : spinnerModeloCarroNovaOcorrencia.getSelectedItem().toString();
 
-                String montadoraCarroNovaOcorrencia = spinnerMontadoraCarroNovaOcorrencia.getSelectedItem()
-                        == null || spinnerMontadoraCarroNovaOcorrencia.getSelectedItemPosition() == 0  ?
+                String montadoraCarroNovaOcorrencia =
+                        spinnerMontadoraCarroNovaOcorrencia.getSelectedItemPosition() == 0  ?
                         null : spinnerMontadoraCarroNovaOcorrencia.getSelectedItem().toString();
 
                 String descricaoNovaOcorrencia = editTextDescricaoNovaOcorrencia.getText().toString().trim();

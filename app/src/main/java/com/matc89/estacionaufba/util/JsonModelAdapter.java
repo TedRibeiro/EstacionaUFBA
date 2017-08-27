@@ -11,21 +11,20 @@ import android.widget.TextView;
 import com.matc89.estacionaufba.R;
 
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
-
-import static com.matc89.estacionaufba.enums.JsonType.BRANDS;
-import static com.matc89.estacionaufba.enums.JsonType.VEHICLES;
 
 /**
  * Created by icaroerasmo on 27/08/17.
  */
 
-public class JsonAdapter extends BaseAdapter implements SpinnerAdapter{
+public class JsonModelAdapter extends BaseAdapter implements SpinnerAdapter{
 
     Map<Integer, String> elements;
     Activity activity;
 
-    public JsonAdapter(Activity activity, Map<Integer, String> elements){
+    Integer id;
+    String value;
+
+    public JsonModelAdapter(Activity activity, Map<Integer, String> elements){
         this.elements = elements;
         this.activity = activity;
     }
@@ -36,50 +35,45 @@ public class JsonAdapter extends BaseAdapter implements SpinnerAdapter{
     }
 
     @Override
-    public Object getItem(int position) {
-        return elements.get(position);
+    public String getItem(int position) {
+        loadElement(position);
+        return value;
     }
 
     @Override
     public long getItemId(final int position) {
-
-        int a = 0;
-
-        for(Integer i : elements.keySet()){
-            if(a == position){
-                return i;
-            }
-            a++;
-        }
-        return -1;
+        loadElement(position);
+        return id;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+        loadElement(position);
+
         View spinView;
         if( convertView == null ){
             LayoutInflater inflater = activity.getLayoutInflater();
-            spinView = inflater.inflate(R.layout.spin_layout, null);
+            spinView = inflater.inflate(R.layout.spin_layout_model, null);
         } else {
             spinView = convertView;
         }
         TextView t1 = (TextView) spinView.findViewById(R.id.field1);
-        t1.setText(getElementIdByPosition(position));
+        t1.setText(value);
         return spinView;
     }
 
-    private String getElementIdByPosition(int pos){
+    private void loadElement(int position){
 
-            int i = 0;
+        Integer a = 0;
 
-            for(String element : elements.values()){
-                if(i == pos){
-                    return element;
-                }
-                i++;
+        for(Integer key : elements.keySet()){
+            if(position == a){
+                id = key;
+                value = elements.get(key);
+                return;
             }
-
-        return null;
+            a++;
+        }
     }
 }

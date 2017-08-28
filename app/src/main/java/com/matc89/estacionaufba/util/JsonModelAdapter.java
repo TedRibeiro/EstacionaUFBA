@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class JsonModelAdapter extends BaseAdapter implements SpinnerAdapter{
 
-    Map<Integer, String> elements;
+     Map<Integer, String> elements;
     Activity activity;
 
     Integer id;
@@ -31,6 +31,7 @@ public class JsonModelAdapter extends BaseAdapter implements SpinnerAdapter{
 
     @Override
     public int getCount() {
+
         return elements.size();
     }
 

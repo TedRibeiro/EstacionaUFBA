@@ -15,6 +15,7 @@ public class Ocorrencia implements IOcorrenciaSchema{
     private String titulo;
     private String descricao;
     private String placaCarro;
+    private String marcaCarro;
     private String modeloCarro;
     private String local;
     private double latitude;
@@ -30,12 +31,13 @@ public class Ocorrencia implements IOcorrenciaSchema{
 
     public Ocorrencia(long userId) { this.userId = userId; }
 
-    public Ocorrencia(String titulo, String descricao, String placaCarro, String modeloCarro, String local,
-                      double latitude, double longitude, long status, long userId,
-                String dateCreated, String dateUpdated) {
+    public Ocorrencia(String titulo, String descricao, String placaCarro, String marcaCarro,
+                      String modeloCarro, String local, double latitude, double longitude,
+                      long status, long userId, String dateCreated, String dateUpdated) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.placaCarro = placaCarro;
+        this.marcaCarro = marcaCarro;
         this.modeloCarro = modeloCarro;
         this.local = local;
         this.latitude = latitude;
@@ -55,6 +57,7 @@ public class Ocorrencia implements IOcorrenciaSchema{
         args.putString(COLUMN_TITULO, ocorrencia.getTitulo());
         args.putString(COLUMN_DESCRICAO, ocorrencia.getDescricao());
         args.putString(COLUMN_PLACA_CARRO, ocorrencia.getPlacaCarro());
+        args.putString(COLUMN_MARCA_CARRO, ocorrencia.getMarcaCarro());
         args.putString(COLUMN_MODELO_CARRO, ocorrencia.getModeloCarro());
         args.putString(COLUMN_LOCAL, ocorrencia.getLocal());
         args.putDouble(COLUMN_LATITUDE, ocorrencia.getLatitude());
@@ -73,6 +76,7 @@ public class Ocorrencia implements IOcorrenciaSchema{
             ocorrencia.setTitulo(args.getString(COLUMN_TITULO));
             ocorrencia.setDescricao(args.getString(COLUMN_DESCRICAO));
             ocorrencia.setPlacaCarro(args.getString(COLUMN_PLACA_CARRO));
+            ocorrencia.setMarcaCarro(args.getString(COLUMN_MARCA_CARRO));
             ocorrencia.setModeloCarro(args.getString(COLUMN_MODELO_CARRO));
             ocorrencia.setLocal(args.getString(COLUMN_LOCAL));
             ocorrencia.setLatitude(args.getDouble(COLUMN_LATITUDE));
@@ -120,6 +124,10 @@ public class Ocorrencia implements IOcorrenciaSchema{
     public String getModeloCarro() { return modeloCarro; }
 
     public void setModeloCarro(String modeloCarro) { this.modeloCarro = modeloCarro; }
+
+    public String getMarcaCarro(){ return marcaCarro; }
+
+    public void setMarcaCarro(String marcaCarro){this.marcaCarro = marcaCarro;}
 
     public String getLocal() {
         return local;

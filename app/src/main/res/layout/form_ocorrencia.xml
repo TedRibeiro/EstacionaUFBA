@@ -59,13 +59,23 @@
             android:textSize="18sp"
             android:textColor="?android:attr/textColorPrimaryNoDisable" />
 
-        <EditText
-            android:id="@+id/editText_ocorrencia_modelo_carro"
-            android:inputType="textPersonName"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <Spinner
+                android:id="@+id/spinner_ocorrencia_montadora_carro"
+                android:hint="@string/modelo_carro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5" />
+            <Spinner
+            android:id="@+id/spinner_ocorrencia_modelo_carro"
             android:hint="@string/modelo_carro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="0.5"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout

@@ -1,5 +1,6 @@
 package com.matc89.estacionaufba.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
@@ -11,7 +12,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -22,13 +23,22 @@ import com.matc89.estacionaufba.db.DatabaseHandler;
 import com.matc89.estacionaufba.db.vo.Ocorrencia;
 import com.matc89.estacionaufba.interfaces.IOcorrenciaSchema;
 import com.matc89.estacionaufba.meta.Constants;
-import com.matc89.estacionaufba.meta.EstacionaUFBAConfigurations;
 import com.matc89.estacionaufba.meta.EstacionaUFBAFunctions;
 import com.matc89.estacionaufba.meta.HandleLocationIntentService;
+import com.matc89.estacionaufba.util.JsonModelAdapter;
+import com.matc89.estacionaufba.util.LoadCarsTask;
 import com.matc89.estacionaufba.util.Mask;
+
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
+import static com.matc89.estacionaufba.enums.JsonType.BRANDS;
+import static com.matc89.estacionaufba.enums.JsonType.VEHICLES;
 
 public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchema, View.OnClickListener {
     private static final int UPDATE_LOCAL_ADDRESS = 0;
+    /*public static final String VEHICLES = "//fipeapi.appspot.com/api/1/carros/veiculos/%d.json";
+    public static final String BRANDS = "http://fipeapi.appspot.com/api/1/carros/marcas.json";*/
     private Context mContext;
     private View mForm;
     private Ocorrencia mOcorrencia;
@@ -70,8 +80,88 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
         mForm = view.findViewById(R.id.form_container);
         mEditTextLocalOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_local);
 
+        final Spinner montaSpinn = (Spinner) mForm.findViewById(R.id.spinner_ocorrencia_montadora_carro);
+        final Spinner modelSpinn = (Spinner) mForm.findViewById(R.id.spinner_ocorrencia_modelo_carro);
+
+        LoadCarsTask loadCarsTask = new LoadCarsTask(BRANDS.toString());
+        loadCarsTask.execute();
+        Map<Integer, String> list = null;
+        try {
+            list = loadCarsTask.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        JsonModelAdapter brandAdapter = new JsonModelAdapter(this.getActivity(), list);
+
+        final Activity thisAct = this.getActivity();
+
+        montaSpinn.setAdapter(brandAdapter);
+        montaSpinn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                LoadCarsTask loadCarsTask = new LoadCarsTask(String.format(VEHICLES.toString(), getElementIdByPosition(position)));
+
+                loadCarsTask.execute();
+
+                try {
+
+                    Map<Integer, String> elements = loadCarsTask.get();
+
+                    if(montaSpinn.getSelectedItem().equals("Select")){
+                        modelSpinn.setEnabled(false);
+                        modelSpinn.setSelection(0);
+                        return;
+                    }
+
+                    JsonModelAdapter modelAdapter = new JsonModelAdapter(thisAct, elements);
+                    modelSpinn.setAdapter(modelAdapter);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+                modelSpinn.setEnabled(true);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         view.findViewById(R.id.button_adicionar_ocorrencia).setOnClickListener(this);
         return view;
+    }
+
+    public Integer getElementIdByPosition(int pos){
+
+        try {
+            LoadCarsTask load = new LoadCarsTask(BRANDS.toString());
+            load.execute();
+
+            Map<Integer, String> mapList = load.get();
+
+            int i = 0;
+
+            for(Integer num : mapList.keySet()){
+                if(i == pos){
+                    return num;
+                }
+                i++;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     @Override
@@ -95,13 +185,22 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                 //Capturando componentes
                 EditText editTextTituloNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_titulo);
                 EditText editTextPlacaCarroNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_placa_carro);
-                EditText editTextModeloCarroNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_modelo_carro);
+                Spinner spinnerModeloCarroNovaOcorrencia = (Spinner) mForm.findViewById(R.id.spinner_ocorrencia_modelo_carro);
+                Spinner spinnerMontadoraCarroNovaOcorrencia = (Spinner) mForm.findViewById(R.id.spinner_ocorrencia_montadora_carro);
                 EditText editTextDescricaoNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_descricao);
 
                 //Capturando valores dos componentes
                 String tituloNovaOcorrencia = editTextTituloNovaOcorrencia.getText().toString().trim();
                 String placaCarroNovaOcorrencia = editTextPlacaCarroNovaOcorrencia.getText().toString().trim();
-                String modeloCarroNovaOcorrencia = editTextModeloCarroNovaOcorrencia.getText().toString().trim();
+
+                String modeloCarroNovaOcorrencia =
+                        spinnerModeloCarroNovaOcorrencia.getSelectedItemPosition() < 1 ?
+                        null : spinnerModeloCarroNovaOcorrencia.getSelectedItem().toString();
+
+                String montadoraCarroNovaOcorrencia =
+                        spinnerMontadoraCarroNovaOcorrencia.getSelectedItemPosition() < 1  ?
+                        null : spinnerMontadoraCarroNovaOcorrencia.getSelectedItem().toString();
+
                 String descricaoNovaOcorrencia = editTextDescricaoNovaOcorrencia.getText().toString().trim();
                 String localNovaOcorrencia = mEditTextLocalOcorrencia.getText().toString().trim();
 
@@ -121,17 +220,29 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                     error = true;
                 }
                 if (placaCarroNovaOcorrencia.length() == 0) {
-                    editTextTituloNovaOcorrencia.requestFocus();
-                    editTextTituloNovaOcorrencia.setError(mContext.getString(R.string.campo_obrigatorio));
+                    editTextPlacaCarroNovaOcorrencia.requestFocus();
+                    editTextPlacaCarroNovaOcorrencia.setError(mContext.getString(R.string.campo_obrigatorio));
                     error = true;
                 } else if(placaCarroNovaOcorrencia.length() < 8){
-                    editTextTituloNovaOcorrencia.requestFocus();
-                    editTextTituloNovaOcorrencia.setError("Placa inválida");
+                    editTextPlacaCarroNovaOcorrencia.requestFocus();
+                    editTextPlacaCarroNovaOcorrencia.setError("Placa inválida");
                     error = true;
                 }
                 if (localNovaOcorrencia.length() == 0) {
                     mEditTextLocalOcorrencia.requestFocus();
                     mEditTextLocalOcorrencia.setError(mContext.getString(R.string.campo_obrigatorio));
+                    error = true;
+                }
+
+                if(montadoraCarroNovaOcorrencia == null){
+                    spinnerMontadoraCarroNovaOcorrencia.requestFocus();
+                    Toast.makeText(this.getContext(), "Montadora do carro obrigatório", Toast.LENGTH_SHORT).show();
+                    error = true;
+                }
+
+                if(modeloCarroNovaOcorrencia == null){
+                    spinnerModeloCarroNovaOcorrencia.requestFocus();
+                    Toast.makeText(this.getContext(), "Modelo do carro obrigatório", Toast.LENGTH_SHORT).show();
                     error = true;
                 }
 
@@ -144,8 +255,9 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                 DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
                 databaseHandler.open();
 
-                mOcorrencia = new Ocorrencia(tituloNovaOcorrencia, descricaoNovaOcorrencia, placaCarroNovaOcorrencia,
-                        modeloCarroNovaOcorrencia, localNovaOcorrencia, latitude, longitude, 1, mOcorrencia.getUserId(),
+                mOcorrencia = new Ocorrencia(tituloNovaOcorrencia, descricaoNovaOcorrencia,
+                        placaCarroNovaOcorrencia, montadoraCarroNovaOcorrencia, modeloCarroNovaOcorrencia,
+                        localNovaOcorrencia, latitude, longitude, 1, mOcorrencia.getUserId(),
                         EstacionaUFBAFunctions.getCurrentDateTime(), null);
                 if (databaseHandler.getOcorrenciaDAO().addOcorrencia(mOcorrencia)) {
                     //Avisando que o cadastro obteve sucesso

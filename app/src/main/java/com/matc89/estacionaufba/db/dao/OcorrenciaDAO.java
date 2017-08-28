@@ -91,14 +91,15 @@ public class OcorrenciaDAO extends DaoHelper<Ocorrencia> implements IOcorrenciaS
         ocorrencia.setTitulo(cursor.getString(1));
         ocorrencia.setDescricao(cursor.getString(2));
         ocorrencia.setPlacaCarro(cursor.getString(3));
-        ocorrencia.setModeloCarro(cursor.getString(4));
-        ocorrencia.setLocal(cursor.getString(5));
-        ocorrencia.setLatitude(cursor.getDouble(6));
-        ocorrencia.setLongitude(cursor.getDouble(7));
-        ocorrencia.setStatus(cursor.getLong(8));
-        ocorrencia.setUserId(cursor.getLong(9));
-        ocorrencia.setDateCreated(cursor.getString(10));
-        ocorrencia.setDateUpdated(cursor.getString(11));
+        ocorrencia.setMarcaCarro(cursor.getString(4));
+        ocorrencia.setModeloCarro(cursor.getString(5));
+        ocorrencia.setLocal(cursor.getString(6));
+        ocorrencia.setLatitude(cursor.getDouble(7));
+        ocorrencia.setLongitude(cursor.getDouble(8));
+        ocorrencia.setStatus(cursor.getLong(9));
+        ocorrencia.setUserId(cursor.getLong(10));
+        ocorrencia.setDateCreated(cursor.getString(11));
+        ocorrencia.setDateUpdated(cursor.getString(12));
         return ocorrencia;
     }
 
@@ -111,6 +112,7 @@ public class OcorrenciaDAO extends DaoHelper<Ocorrencia> implements IOcorrenciaS
         mContentValues.put(COLUMN_TITULO, ocorrencia.getTitulo());
         mContentValues.put(COLUMN_DESCRICAO, ocorrencia.getDescricao());
         mContentValues.put(COLUMN_PLACA_CARRO, ocorrencia.getPlacaCarro());
+        mContentValues.put(COLUMN_MARCA_CARRO, ocorrencia.getMarcaCarro());
         mContentValues.put(COLUMN_MODELO_CARRO, ocorrencia.getModeloCarro());
         mContentValues.put(COLUMN_LOCAL, ocorrencia.getLocal());
         mContentValues.put(COLUMN_LATITUDE, ocorrencia.getLatitude());

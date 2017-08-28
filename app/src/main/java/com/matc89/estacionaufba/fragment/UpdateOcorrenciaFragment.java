@@ -3,6 +3,7 @@ package com.matc89.estacionaufba.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.matc89.estacionaufba.R;
@@ -24,6 +26,7 @@ import com.matc89.estacionaufba.util.LoadCarsTask;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.zip.Inflater;
+import java.io.File;
 
 import static com.matc89.estacionaufba.enums.JsonType.BRANDS;
 import static com.matc89.estacionaufba.enums.JsonType.VEHICLES;
@@ -67,6 +70,7 @@ public class UpdateOcorrenciaFragment extends Fragment {
         final Spinner  ocorrenciaModeloCarro = (Spinner) view.findViewById(R.id.spinner_ocorrencia_modelo_carro);
         EditText ocorrenciaDescricao = (EditText) view.findViewById(R.id.editText_ocorrencia_descricao);
         EditText ocorrenciaLocal = (EditText) view.findViewById(R.id.editText_ocorrencia_local);
+        ImageView ocorrenciaFoto = (ImageView) view.findViewById(R.id.imageView_ocorrencia_photo);
 
         ((Button) view.findViewById(R.id.button_update_ocorrencia)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +119,12 @@ public class UpdateOcorrenciaFragment extends Fragment {
         ocorrenciaLocal.setText(mOcorrencia.getLocal());
         ocorrenciaDescricao.setText(mOcorrencia.getDescricao());
         ocorrenciaPlacaCarro.setText(mOcorrencia.getPlacaCarro());
+        if(mOcorrencia.getPhotoPath() == null){
+            ocorrenciaFoto.setVisibility(view.GONE);
+        }
+        else {
+            ocorrenciaFoto.setImageURI(Uri.fromFile(new File(mOcorrencia.getPhotoPath())));
+        }
 
         return view;
     }

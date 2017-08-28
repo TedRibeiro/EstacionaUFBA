@@ -11,12 +11,25 @@
         android:id="@+id/form_container"
         layout="@layout/form_ocorrencia" />
 
-    <Button
-        android:id="@+id/button_adicionar_ocorrencia"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/form_container"
-        android:onClick="onClick"
-        android:text="@string/adicionar" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/form_container">
+
+        <Button
+            android:id="@+id/button_adicionar_imagem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="@string/adicionar_foto" />
+
+        <Button
+            android:id="@+id/button_adicionar_ocorrencia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:text="@string/adicionar_ocorrencia" />
+    </LinearLayout>
 
 </RelativeLayout>

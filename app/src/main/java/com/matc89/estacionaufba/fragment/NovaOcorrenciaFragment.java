@@ -2,21 +2,27 @@ package com.matc89.estacionaufba.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ResultReceiver;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
-
+import static android.app.Activity.RESULT_OK;
 import com.matc89.estacionaufba.R;
 import com.matc89.estacionaufba.activity.MainActivity;
 import com.matc89.estacionaufba.db.DatabaseHandler;
@@ -29,6 +35,10 @@ import com.matc89.estacionaufba.util.JsonModelAdapter;
 import com.matc89.estacionaufba.util.LoadCarsTask;
 import com.matc89.estacionaufba.util.Mask;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -37,8 +47,8 @@ import static com.matc89.estacionaufba.enums.JsonType.VEHICLES;
 
 public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchema, View.OnClickListener {
     private static final int UPDATE_LOCAL_ADDRESS = 0;
-    /*public static final String VEHICLES = "//fipeapi.appspot.com/api/1/carros/veiculos/%d.json";
-    public static final String BRANDS = "http://fipeapi.appspot.com/api/1/carros/marcas.json";*/
+    static final int REQUEST_TAKE_PHOTO = 1;
+    private Uri photoUri;
     private Context mContext;
     private View mForm;
     private Ocorrencia mOcorrencia;
@@ -204,6 +214,11 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                 String descricaoNovaOcorrencia = editTextDescricaoNovaOcorrencia.getText().toString().trim();
                 String localNovaOcorrencia = mEditTextLocalOcorrencia.getText().toString().trim();
 
+                String photoPath = null;
+                if(getPhotoPath() != null){
+                    photoPath = getPhotoPath();
+                }
+
                 double latitude = 0;
                 double longitude = 0;
                 if (mLocation != null) {
@@ -258,7 +273,7 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                 mOcorrencia = new Ocorrencia(tituloNovaOcorrencia, descricaoNovaOcorrencia,
                         placaCarroNovaOcorrencia, montadoraCarroNovaOcorrencia, modeloCarroNovaOcorrencia,
                         localNovaOcorrencia, latitude, longitude, 1, mOcorrencia.getUserId(),
-                        EstacionaUFBAFunctions.getCurrentDateTime(), null);
+                        EstacionaUFBAFunctions.getCurrentDateTime(), null, photoPath);
                 if (databaseHandler.getOcorrenciaDAO().addOcorrencia(mOcorrencia)) {
                     //Avisando que o cadastro obteve sucesso
                     Toast.makeText(mContext, mContext.getString(R.string.criacao_ocorrencia_sucedida), Toast
@@ -307,6 +322,68 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                 mLocation = location;
                 HandleLocationIntentService.startActionFetchAddress(mContext, location, mReceiver);
             }
+        }
+    }
+
+    public String getPhotoPath(){
+        String photoPath = null;
+        if (photoUri != null) {
+            photoPath = photoUri.getPath();
+        }
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath){
+        this.photoUri = Uri.fromFile(new File(photoPath));
+        ImageView imageView = (ImageView) mForm.findViewById(R.id.imageView_ocorrencia_photo);
+        imageView.setImageURI(photoUri);
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(mContext.getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(mContext,
+                        "com.matc89.fileprovider",
+                        photoFile);/*
+                this.photoUri= photoURI;*/
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException, IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM), "Camera");
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        setPhotoPath(image.getAbsolutePath());
+        return image;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            ImageView mImageView = (ImageView) mForm.findViewById(R.id.imageView_ocorrencia_photo);
+            mImageView.setImageURI(photoUri);
         }
     }
 

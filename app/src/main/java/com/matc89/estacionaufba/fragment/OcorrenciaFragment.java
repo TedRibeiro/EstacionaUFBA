@@ -53,6 +53,7 @@ public class OcorrenciaFragment extends Fragment implements IOcorrenciaSchema {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ocorrencia, container, false);
         TextView ocorrenciaTitulo = (TextView) view.findViewById(R.id.ocorrencia_titulo);
+        TextView ocorrenciaMarca = (TextView) view.findViewById(R.id.ocorrencia_marca_carro);
         TextView ocorrenciaModeloCarro = (TextView) view.findViewById(R.id.ocorrencia_modelo_carro);
         TextView ocorrenciaPlacaCarro = (TextView) view.findViewById(R.id.ocorrencia_placa_carro);
         TextView ocorrenciaDescricao = (TextView) view.findViewById(R.id.ocorrencia_descricao);
@@ -60,6 +61,7 @@ public class OcorrenciaFragment extends Fragment implements IOcorrenciaSchema {
         TextView ocorrenciaDateCreated = (TextView) view.findViewById(R.id.ocorrencia_dateCreated);
         View buttons_container = (View) view.findViewById(R.id.buttons_container);
         ocorrenciaTitulo.setText(mOcorrencia.getTitulo());
+        ocorrenciaMarca.setText(mOcorrencia.getMarcaCarro());
         ocorrenciaModeloCarro.setText(mOcorrencia.getModeloCarro());
         ocorrenciaPlacaCarro.setText(mOcorrencia.getPlacaCarro());
         ocorrenciaDescricao.setText(mOcorrencia.getDescricao());

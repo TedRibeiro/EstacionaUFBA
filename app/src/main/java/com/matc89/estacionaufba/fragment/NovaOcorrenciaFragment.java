@@ -194,11 +194,11 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                 String placaCarroNovaOcorrencia = editTextPlacaCarroNovaOcorrencia.getText().toString().trim();
 
                 String modeloCarroNovaOcorrencia =
-                        spinnerModeloCarroNovaOcorrencia.getSelectedItemPosition() == 0 ?
+                        spinnerModeloCarroNovaOcorrencia.getSelectedItemPosition() < 1 ?
                         null : spinnerModeloCarroNovaOcorrencia.getSelectedItem().toString();
 
                 String montadoraCarroNovaOcorrencia =
-                        spinnerMontadoraCarroNovaOcorrencia.getSelectedItemPosition() == 0  ?
+                        spinnerMontadoraCarroNovaOcorrencia.getSelectedItemPosition() < 1  ?
                         null : spinnerMontadoraCarroNovaOcorrencia.getSelectedItem().toString();
 
                 String descricaoNovaOcorrencia = editTextDescricaoNovaOcorrencia.getText().toString().trim();
@@ -220,8 +220,8 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                     error = true;
                 }
                 if (placaCarroNovaOcorrencia.length() == 0) {
-                    editTextTituloNovaOcorrencia.requestFocus();
-                    editTextTituloNovaOcorrencia.setError(mContext.getString(R.string.campo_obrigatorio));
+                    editTextPlacaCarroNovaOcorrencia.requestFocus();
+                    editTextPlacaCarroNovaOcorrencia.setError(mContext.getString(R.string.campo_obrigatorio));
                     error = true;
                 } else if(placaCarroNovaOcorrencia.length() < 8){
                     editTextPlacaCarroNovaOcorrencia.requestFocus();
@@ -255,8 +255,9 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
                 DatabaseHandler databaseHandler = new DatabaseHandler(getContext());
                 databaseHandler.open();
 
-                mOcorrencia = new Ocorrencia(tituloNovaOcorrencia, descricaoNovaOcorrencia, placaCarroNovaOcorrencia,
-                        modeloCarroNovaOcorrencia, localNovaOcorrencia, latitude, longitude, 1, mOcorrencia.getUserId(),
+                mOcorrencia = new Ocorrencia(tituloNovaOcorrencia, descricaoNovaOcorrencia,
+                        placaCarroNovaOcorrencia, montadoraCarroNovaOcorrencia, modeloCarroNovaOcorrencia,
+                        localNovaOcorrencia, latitude, longitude, 1, mOcorrencia.getUserId(),
                         EstacionaUFBAFunctions.getCurrentDateTime(), null);
                 if (databaseHandler.getOcorrenciaDAO().addOcorrencia(mOcorrencia)) {
                     //Avisando que o cadastro obteve sucesso

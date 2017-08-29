@@ -24,6 +24,7 @@ public class Ocorrencia implements IOcorrenciaSchema{
     private long userId;
     private String dateCreated;
     private String dateUpdated;
+    private String photoPath;
 
     public Ocorrencia() {
 
@@ -33,7 +34,7 @@ public class Ocorrencia implements IOcorrenciaSchema{
 
     public Ocorrencia(String titulo, String descricao, String placaCarro, String marcaCarro,
                       String modeloCarro, String local, double latitude, double longitude,
-                      long status, long userId, String dateCreated, String dateUpdated) {
+                      long status, long userId, String dateCreated, String dateUpdated, String photoPath) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.placaCarro = placaCarro;
@@ -46,6 +47,7 @@ public class Ocorrencia implements IOcorrenciaSchema{
         this.userId = userId;
         this.dateCreated = dateCreated;
         this.dateUpdated = dateUpdated;
+        this.photoPath = photoPath;
     }
 
     /**
@@ -66,6 +68,7 @@ public class Ocorrencia implements IOcorrenciaSchema{
         args.putLong(COLUMN_USER_ID, ocorrencia.getUserId());
         args.putString(COLUMN_DATE_CREATED, ocorrencia.getDateCreated());
         args.putString(COLUMN_DATE_UPDATED, ocorrencia.getDateUpdated());
+        args.putString(COLUMN_PHOTO_PATH, ocorrencia.getPhotoPath());
         return args;
     }
 
@@ -85,6 +88,7 @@ public class Ocorrencia implements IOcorrenciaSchema{
             ocorrencia.setUserId(args.getLong(COLUMN_USER_ID));
             ocorrencia.setDateCreated(args.getString(COLUMN_DATE_CREATED));
             ocorrencia.setDateUpdated(args.getString(COLUMN_DATE_UPDATED));
+            ocorrencia.setPhotoPath(args.getString(COLUMN_PHOTO_PATH));
         }
         return ocorrencia;
     }
@@ -176,4 +180,8 @@ public class Ocorrencia implements IOcorrenciaSchema{
     public void setDateUpdated(String dateUpdated) {
         this.dateUpdated = dateUpdated;
     }
+
+    public String getPhotoPath() { return photoPath; }
+
+    public void setPhotoPath(String photoPath) { this.photoPath = photoPath; }
 }

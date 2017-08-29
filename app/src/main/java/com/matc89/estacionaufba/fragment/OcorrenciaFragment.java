@@ -2,12 +2,14 @@ package com.matc89.estacionaufba.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.matc89.estacionaufba.R;
@@ -15,6 +17,8 @@ import com.matc89.estacionaufba.db.vo.Ocorrencia;
 import com.matc89.estacionaufba.interfaces.IOcorrenciaSchema;
 import com.matc89.estacionaufba.interfaces.OnOcorrenciaInteractionListener;
 import com.matc89.estacionaufba.meta.EstacionaUFBAConfigurations;
+
+import java.io.File;
 
 
 public class OcorrenciaFragment extends Fragment implements IOcorrenciaSchema {
@@ -52,6 +56,7 @@ public class OcorrenciaFragment extends Fragment implements IOcorrenciaSchema {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_ocorrencia, container, false);
+        ImageView ocorrenciaFoto = (ImageView) view.findViewById(R.id.image_ocorrencia_photo);
         TextView ocorrenciaTitulo = (TextView) view.findViewById(R.id.ocorrencia_titulo);
         TextView ocorrenciaMarca = (TextView) view.findViewById(R.id.ocorrencia_marca_carro);
         TextView ocorrenciaModeloCarro = (TextView) view.findViewById(R.id.ocorrencia_modelo_carro);
@@ -60,6 +65,12 @@ public class OcorrenciaFragment extends Fragment implements IOcorrenciaSchema {
         TextView ocorrenciaLocal = (TextView) view.findViewById(R.id.ocorrencia_local);
         TextView ocorrenciaDateCreated = (TextView) view.findViewById(R.id.ocorrencia_dateCreated);
         View buttons_container = (View) view.findViewById(R.id.buttons_container);
+        if(mOcorrencia.getPhotoPath() == null){
+            ocorrenciaFoto.setVisibility(view.GONE);
+        }
+        else {
+            ocorrenciaFoto.setImageURI(Uri.fromFile(new File(mOcorrencia.getPhotoPath())));
+        }
         ocorrenciaTitulo.setText(mOcorrencia.getTitulo());
         ocorrenciaMarca.setText(mOcorrencia.getMarcaCarro());
         ocorrenciaModeloCarro.setText(mOcorrencia.getModeloCarro());

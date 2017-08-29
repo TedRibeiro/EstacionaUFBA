@@ -44,6 +44,8 @@
 
     <!--Botões-->
     <string name="adicionar">Adicionar</string>
+    <string name="adicionar_foto">Adicionar Foto</string>
+    <string name="adicionar_ocorrencia">Adicionar Ocorrência</string>
     <string name="editar">Editar</string>
     <string name="delete">Deletar</string>
 

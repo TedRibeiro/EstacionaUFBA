@@ -84,7 +84,6 @@ public class OcorrenciaDAO extends DaoHelper<Ocorrencia> implements IOcorrenciaS
         return getOcorrenciasOrderBy(COLUMN_DATE_CREATED, "DESC");
     }
 
-    //Converter cada linha da tabela que está no tipo Cursor para o tipo Ocorrencia
     protected Ocorrencia cursorToEntity(Cursor cursor) {
         Ocorrencia ocorrencia = new Ocorrencia();
         ocorrencia.setId(cursor.getLong(0));
@@ -100,6 +99,7 @@ public class OcorrenciaDAO extends DaoHelper<Ocorrencia> implements IOcorrenciaS
         ocorrencia.setUserId(cursor.getLong(10));
         ocorrencia.setDateCreated(cursor.getString(11));
         ocorrencia.setDateUpdated(cursor.getString(12));
+        ocorrencia.setPhotoPath(cursor.getString(13));
         return ocorrencia;
     }
 
@@ -121,6 +121,7 @@ public class OcorrenciaDAO extends DaoHelper<Ocorrencia> implements IOcorrenciaS
         mContentValues.put(COLUMN_USER_ID, ocorrencia.getUserId());
         mContentValues.put(COLUMN_DATE_CREATED, ocorrencia.getDateCreated());
         mContentValues.put(COLUMN_DATE_UPDATED, ocorrencia.getDateUpdated());
+        mContentValues.put(COLUMN_PHOTO_PATH, ocorrencia.getPhotoPath());
     }
 
 }

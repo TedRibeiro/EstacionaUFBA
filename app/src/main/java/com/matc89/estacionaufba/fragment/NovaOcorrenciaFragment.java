@@ -1,8 +1,10 @@
 package com.matc89.estacionaufba.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,7 +14,9 @@ import android.os.Message;
 import android.os.ResultReceiver;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import static android.app.Activity.RESULT_OK;
+
 import com.matc89.estacionaufba.R;
 import com.matc89.estacionaufba.activity.MainActivity;
 import com.matc89.estacionaufba.db.DatabaseHandler;
@@ -192,6 +197,10 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_adicionar_imagem:
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED
+                        || ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                    ActivityCompat.requestPermissions(getActivity(), new String[] {Manifest.permission.CAMERA , Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                }
                 dispatchTakePictureIntent();
                 break;
 

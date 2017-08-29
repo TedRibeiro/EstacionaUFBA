@@ -97,9 +97,11 @@ public class OcorrenciaDAO extends DaoHelper<Ocorrencia> implements IOcorrenciaS
         ocorrencia.setLatitude(cursor.getDouble(7));
         ocorrencia.setLongitude(cursor.getDouble(8));
         ocorrencia.setStatus(cursor.getLong(9));
-        ocorrencia.setUserId(cursor.getLong(10));
-        ocorrencia.setDateCreated(cursor.getString(11));
-        ocorrencia.setDateUpdated(cursor.getString(12));
+        ocorrencia.setDateCreated(cursor.getString(10));
+        ocorrencia.setDateUpdated(cursor.getString(11));
+        ocorrencia.setUserId(cursor.getLong(12));
+        ocorrencia.setPhotoPath(cursor.getString(13));
+
         return ocorrencia;
     }
 
@@ -121,6 +123,7 @@ public class OcorrenciaDAO extends DaoHelper<Ocorrencia> implements IOcorrenciaS
         mContentValues.put(COLUMN_USER_ID, ocorrencia.getUserId());
         mContentValues.put(COLUMN_DATE_CREATED, ocorrencia.getDateCreated());
         mContentValues.put(COLUMN_DATE_UPDATED, ocorrencia.getDateUpdated());
+        mContentValues.put(COLUMN_PHOTO_PATH, ocorrencia.getPhotoPath());
     }
 
 }

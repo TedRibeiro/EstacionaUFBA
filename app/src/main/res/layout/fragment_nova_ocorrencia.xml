@@ -7,29 +7,34 @@
     android:orientation="vertical"
     android:background="@color/colorMainBackground">
 
-    <include
-        android:id="@+id/form_container"
-        layout="@layout/form_ocorrencia" />
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_below="@+id/form_container">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/button_adicionar_imagem"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="@string/adicionar_foto" />
+            android:layout_below="@+id/form_container"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/button_adicionar_ocorrencia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="onClick"
-            android:text="@string/adicionar_ocorrencia" />
-    </LinearLayout>
+            <include
+                android:id="@+id/form_container"
+                layout="@layout/form_ocorrencia" />
+
+            <Button
+                android:id="@+id/button_adicionar_imagem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="@string/adicionar_foto" />
+
+            <Button
+                android:id="@+id/button_adicionar_ocorrencia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="@string/adicionar_ocorrencia" />
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

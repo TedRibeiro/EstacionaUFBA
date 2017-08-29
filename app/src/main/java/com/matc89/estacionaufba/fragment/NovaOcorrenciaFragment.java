@@ -146,6 +146,7 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
         });
 
         view.findViewById(R.id.button_adicionar_ocorrencia).setOnClickListener(this);
+        view.findViewById(R.id.button_adicionar_imagem).setOnClickListener(this);
         return view;
     }
 
@@ -190,7 +191,10 @@ public class NovaOcorrenciaFragment extends Fragment implements IOcorrenciaSchem
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            //Botão de cadastrar nova promoção
+            case R.id.button_adicionar_imagem:
+                dispatchTakePictureIntent();
+                break;
+
             case R.id.button_adicionar_ocorrencia:
                 //Capturando componentes
                 EditText editTextTituloNovaOcorrencia = (EditText) mForm.findViewById(R.id.editText_ocorrencia_titulo);
